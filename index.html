@@ -1,0 +1,93 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<script>
+window.YTD = {tweet: {}};
+</script>
+<script src="tweet.js"></script>
+<style>
+body{
+  color: white;
+  background-color: black;
+}
+div {
+  font-size: xx-small;
+}
+a{color: #ddf;}
+</style>
+</head>
+<body>
+<h1>Tweet archive viewer 2018</h1>
+<a href="?mode=ranking">ranking</a>
+<a href="?mode=monthly">monthly</a>
+
+
+<script>
+var count = 0
+var tweets = [];
+YTD.tweet.part0.forEach(function(t){
+  var d = new Date(t.created_at);
+  if(d.getFullYear() == 2018){
+    tweets.push(t);
+  }
+  count ++;
+});
+
+var search = document.location.search;
+if(search.length > 0){
+  search = search.replace("?","")
+  mode = search.split("=")[1]
+}
+
+document.write("<h1>" + mode + "</h1>")
+
+function monthly(){
+  // monthly
+  tweets.sort(function(a, b){return (new Date(a.created_at)) - (new Date(b.created_at))});
+
+  var preMonth = -1;
+  tweets.forEach(function(t){
+    var d = new Date(t.created_at);
+    if(preMonth != d.getMonth()){
+      document.write("<h1>" + (d.getMonth() + 1) + "</h1>");
+    }
+    preMonth = d.getMonth();
+    var ds = d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes();
+    document.write("<div>" + ds + ":" + t.full_text + "</div>");
+    if(t.entities.media){
+      t.entities.media.forEach(function(e){
+        document.write('<img src="'+ e.media_url +':thumb">');
+      });
+    }
+  })
+}
+
+function rt(){
+  // RT ranking
+
+  tweets.sort(function(a, b){return parseInt(b.retweet_count) - parseInt(a.retweet_count)});
+  tweets.forEach(function(t){
+    var d = new Date(t.created_at);
+    var ds = d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes();
+    document.write("<div>" + "RT: " + t.retweet_count + " "  + "fav: " + t.favorite_count + " https://twitter.com/ina_ani/status/" + t.id_str + " " + ds + ":" + t.full_text + "</div>");
+    if(t.entities.media){
+      t.entities.media.forEach(function(e){
+        document.write('<img src="'+ e.media_url +':thumb">');
+      });
+    }
+  })
+}
+
+switch(mode){
+  case "monthly":
+    monthly()
+    break
+  case "ranking":
+    rt()
+    break
+}
+
+</script>
+
+</body>
+</html>
