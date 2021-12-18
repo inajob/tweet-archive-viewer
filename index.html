@@ -17,7 +17,7 @@ a{color: #ddf;}
 </style>
 </head>
 <body>
-<h1>Tweet archive viewer 2019</h1>
+<h1>Tweet archive viewer 2021</h1>
 <a href="?mode=ranking">ranking</a>
 <a href="?mode=monthly">monthly</a>
 
@@ -26,8 +26,8 @@ a{color: #ddf;}
 var count = 0
 var tweets = [];
 YTD.tweet.part0.forEach(function(t){
-  var d = new Date(t.created_at);
-  if(d.getFullYear() == 2019){
+  var d = new Date(t.tweet.created_at);
+  if(d.getFullYear() == 2021){
     tweets.push(t);
   }
   count ++;
@@ -47,15 +47,15 @@ function monthly(){
 
   var preMonth = -1;
   tweets.forEach(function(t){
-    var d = new Date(t.created_at);
+    var d = new Date(t.tweet.created_at);
     if(preMonth != d.getMonth()){
       document.write("<h1>" + (d.getMonth() + 1) + "</h1>");
     }
     preMonth = d.getMonth();
     var ds = d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes();
-    document.write("<div>" + ds + ":" + t.full_text + "</div>");
-    if(t.entities.media){
-      t.entities.media.forEach(function(e){
+    document.write("<div>" + ds + ":" + t.tweet.full_text + "</div>");
+    if(t.tweet.entities.media){
+      t.tweet.entities.media.forEach(function(e){
         document.write('<img src="'+ e.media_url +':thumb">');
       });
     }
