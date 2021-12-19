@@ -65,13 +65,13 @@ function monthly(){
 function rt(){
   // RT ranking
 
-  tweets.sort(function(a, b){return parseInt(b.retweet_count) - parseInt(a.retweet_count)});
+  tweets.sort(function(a, b){return parseInt(b.tweet.retweet_count) - parseInt(a.tweet.retweet_count)});
   tweets.forEach(function(t){
-    var d = new Date(t.created_at);
+    var d = new Date(t.tweet.created_at);
     var ds = d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes();
-    document.write("<div>" + "RT: " + t.retweet_count + " "  + "fav: " + t.favorite_count + " https://twitter.com/ina_ani/status/" + t.id_str + " " + ds + ":" + t.full_text + "</div>");
-    if(t.entities.media){
-      t.entities.media.forEach(function(e){
+    document.write("<div>" + "RT: " + t.tweet.retweet_count + " "  + "fav: " + t.tweet.favorite_count + " https://twitter.com/ina_ani/status/" + t.tweet.id_str + " " + ds + ":" + t.tweet.full_text + "</div>");
+    if(t.tweet.entities.media){
+      t.tweet.entities.media.forEach(function(e){
         document.write('<img src="'+ e.media_url +':thumb">');
       });
     }
