@@ -20,6 +20,7 @@ a{color: #ddf;}
 <h1>Tweet archive viewer 2021</h1>
 <a href="?mode=ranking">ranking</a>
 <a href="?mode=monthly">monthly</a>
+<a href="?mode=search&q=Arduboy">search</a>
 
 
 <script>
@@ -34,12 +35,27 @@ YTD.tweet.part0.forEach(function(t){
 });
 
 var search = document.location.search;
+var opts = {};
 if(search.length > 0){
   search = search.replace("?","")
-  mode = search.split("=")[1]
+  search.split("&").forEach((p) => {
+    let parts = p.split("=")
+    opts[parts[0]] = parts[1]
+  })
 }
+mode = opts['mode']
 
 document.write("<h1>" + mode + "</h1>")
+
+function searchFunc(){
+  YTD.tweet.part0.forEach(function(t){
+    let q = decodeURIComponent(opts['q'])
+    if(t.tweet.full_text.indexOf(q) != -1){
+		    document.write("<div>"+ t.tweet.created_at + t.tweet.full_text + "<a href='https://twitter.com/aaa/status/" +t.tweet.id+ "'>*</a>"+ "</div>");
+		    console.log(t.tweet)
+    }
+  });
+}
 
 function monthly(){
   // monthly
@@ -85,6 +101,10 @@ switch(mode){
   case "ranking":
     rt()
     break
+  case "search":
+    searchFunc()
+    break
+
 }
 
 </script>
