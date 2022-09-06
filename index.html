@@ -13,6 +13,17 @@ body{
 div {
   font-size: xx-small;
 }
+div.piece{
+    background-color: #333;
+    margin: 3px;
+    padding: 3px;  
+		border: solid 2px #666;
+    border-radius: 10px;
+}
+div.container{
+  column-count:4;
+	column-gap: 0;
+}
 a{color: #ddf;}
 </style>
 </head>
@@ -48,17 +59,21 @@ mode = opts['mode']
 document.write("<h1>" + mode + "</h1>")
 
 function searchFunc(){
+	document.write("<div class='container'>")
   YTD.tweet.part0.forEach(function(t){
     let q = decodeURIComponent(opts['q'])
     if(t.tweet.full_text.indexOf(q) != -1){
+				document.write("<div class='piece'>")
 		    document.write("<div>"+ t.tweet.created_at + t.tweet.full_text + "<a href='https://twitter.com/aaa/status/" +t.tweet.id+ "'>*</a>"+ "</div>");
 				if(t.tweet.entities.media){
 						t.tweet.entities.media.forEach(function(e){
 								document.write('<img src="'+ e.media_url +':thumb">');
 							});
 					}
+				document.write("</div>")
     }
   });
+	document.write("</div>")
 }
 
 function monthly(){
