@@ -52,7 +52,11 @@ function searchFunc(){
     let q = decodeURIComponent(opts['q'])
     if(t.tweet.full_text.indexOf(q) != -1){
 		    document.write("<div>"+ t.tweet.created_at + t.tweet.full_text + "<a href='https://twitter.com/aaa/status/" +t.tweet.id+ "'>*</a>"+ "</div>");
-		    console.log(t.tweet)
+				if(t.tweet.entities.media){
+						t.tweet.entities.media.forEach(function(e){
+								document.write('<img src="'+ e.media_url +':thumb">');
+							});
+					}
     }
   });
 }
