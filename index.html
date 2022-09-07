@@ -28,9 +28,9 @@ a{color: #ddf;}
 </style>
 </head>
 <body>
-<h1>Tweet archive viewer 2021</h1>
-<a href="?mode=ranking">ranking</a>
-<a href="?mode=monthly">monthly</a>
+<h1>Tweet archive viewer</h1>
+<a href="?mode=ranking">ranking 2021</a>
+<a href="?mode=monthly">monthly 2021</a>
 <a href="?mode=search&q=Arduboy">search</a>
 
 
@@ -59,6 +59,7 @@ mode = opts['mode']
 document.write("<h1>" + mode + "</h1>")
 
 function searchFunc(){
+  document.write("<h2>query: " + decodeURIComponent(opts['q']).replace('<','&lt;').replace('>','&gt;') + "</h2>")
 	document.write("<div class='container'>")
   YTD.tweet.part0.forEach(function(t){
     let q = decodeURIComponent(opts['q'])
