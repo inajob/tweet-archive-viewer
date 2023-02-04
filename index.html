@@ -83,18 +83,24 @@ function dateFunc(){
   let d = parseInt(parts.slice(2))
   document.write("<h2>date: " + m + "/" + d  + "</h2>")
 	document.write("<div class='container'>")
+  let tweets = []
   YTD.tweets.part0.forEach(function(t, i){
     let td = new Date(t.tweet.created_at)
-    if(td.getMonth()+1 == m && td.getDate() == d){
-				document.write("<div class='piece'>")
-        document.write("<div>"+ td.getFullYear()+"/"+(td.getMonth()+1)+"/"+td.getDate() +"</div><div>"+ i + " "+ t.tweet.full_text + "<a href='https://twitter.com/aaa/status/" +t.tweet.id+ "'>*</a>"+ "</div>");
-				if(t.tweet.entities.media){
-						t.tweet.entities.media.forEach(function(e){
-								document.write('<img src="'+ e.media_url +':thumb">');
-							});
-					}
-				document.write("</div>")
+    if(td.getMonth()+1 == m && td.getDate() == d && t.tweet.full_text.indexOf("RT ") != 0 && t.tweet.full_text.indexOf("@") != 0){
+        tweets.push(t);
     }
+  });
+  tweets.sort(function(a, b){return (new Date(a.tweet.created_at)) - (new Date(b.tweet.created_at))});
+  tweets.forEach(function(t){
+      let td = new Date(t.tweet.created_at)
+			document.write("<div class='piece'>")
+      document.write("<div>"+ td.getFullYear()+"/"+(td.getMonth()+1)+"/"+td.getDate() +"</div><div>"+ t.tweet.full_text + "<a href='https://twitter.com/aaa/status/" +t.tweet.id+ "'>*</a>"+ "</div>");
+			if(t.tweet.entities.media){
+					t.tweet.entities.media.forEach(function(e){
+							document.write('<img src="'+ e.media_url +':thumb">');
+						});
+				}
+			document.write("</div>")
   });
 	document.write("</div>")
 }
