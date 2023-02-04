@@ -32,6 +32,7 @@ a{color: #ddf;}
 <a href="?mode=ranking">ranking 2022</a>
 <a href="?mode=monthly">monthly 2022</a>
 <a href="?mode=search&q=Arduboy">search</a>
+<a href="?mode=date&d=0204">date</a>
 
 
 <script>
@@ -76,6 +77,28 @@ function searchFunc(){
   });
 	document.write("</div>")
 }
+function dateFunc(){
+  let parts = opts['d']
+  let m = parseInt(parts.slice(0,2))
+  let d = parseInt(parts.slice(2))
+  document.write("<h2>date: " + m + "/" + d  + "</h2>")
+	document.write("<div class='container'>")
+  YTD.tweets.part0.forEach(function(t, i){
+    let td = new Date(t.tweet.created_at)
+    if(td.getMonth()+1 == m && td.getDate() == d){
+				document.write("<div class='piece'>")
+        document.write("<div>"+ td.getFullYear()+"/"+(td.getMonth()+1)+"/"+td.getDate() +"</div><div>"+ i + " "+ t.tweet.full_text + "<a href='https://twitter.com/aaa/status/" +t.tweet.id+ "'>*</a>"+ "</div>");
+				if(t.tweet.entities.media){
+						t.tweet.entities.media.forEach(function(e){
+								document.write('<img src="'+ e.media_url +':thumb">');
+							});
+					}
+				document.write("</div>")
+    }
+  });
+	document.write("</div>")
+}
+
 
 function monthly(){
   // monthly
@@ -124,6 +147,8 @@ switch(mode){
   case "search":
     searchFunc()
     break
+  case "date":
+    dateFunc()
 
 }
 
