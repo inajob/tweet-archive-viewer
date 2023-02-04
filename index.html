@@ -15,10 +15,10 @@ div {
 }
 div.piece{
     background-color: #333;
-    margin: 3px;
-    padding: 3px;  
-		border: solid 2px #666;
-    border-radius: 10px;
+    margin: 1px;
+    padding: 1px;
+		border: solid 1px #666;
+    border-radius: 0px;
 }
 div.container{
   column-count:4;
@@ -94,7 +94,7 @@ function dateFunc(){
   tweets.forEach(function(t){
       let td = new Date(t.tweet.created_at)
 			document.write("<div class='piece'>")
-      document.write("<div>"+ td.getFullYear()+"/"+(td.getMonth()+1)+"/"+td.getDate() +"</div><div>"+ t.tweet.full_text + "<a href='https://twitter.com/aaa/status/" +t.tweet.id+ "'>*</a>"+ "</div>");
+      document.write("<div>"+ /*td.getFullYear()+"/"+(td.getMonth()+1)+"/"+td.getDate() +*/"</div><div>"+ t.tweet.full_text + "<a href='https://twitter.com/aaa/status/" +t.tweet.id+ "'>*</a>"+ "</div>");
 			if(t.tweet.entities.media){
 					t.tweet.entities.media.forEach(function(e){
 							document.write('<img src="'+ e.media_url +':thumb">');
