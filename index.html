@@ -25,6 +25,9 @@ div.container{
 	column-gap: 0;
 }
 a{color: #ddf;}
+h3 {
+  background-color: #33f;
+}
 </style>
 </head>
 <body>
@@ -91,8 +94,14 @@ function dateFunc(){
     }
   });
   tweets.sort(function(a, b){return (new Date(a.tweet.created_at)) - (new Date(b.tweet.created_at))});
+  let preYear = "";
   tweets.forEach(function(t){
       let td = new Date(t.tweet.created_at)
+      let y = td.getFullYear()
+      if(y != preYear){
+          document.write("<h3>" + y + "</h3>");
+          preYear = y
+      }
 			document.write("<div class='piece'>")
       document.write("<div>"+ /*td.getFullYear()+"/"+(td.getMonth()+1)+"/"+td.getDate() +*/"</div><div>"+ t.tweet.full_text + "<a href='https://twitter.com/aaa/status/" +t.tweet.id+ "'>*</a>"+ "</div>");
 			if(t.tweet.entities.media){
