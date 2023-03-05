@@ -65,18 +65,30 @@ document.write("<h1>" + mode + "</h1>")
 function searchFunc(){
   document.write("<h2>query: " + decodeURIComponent(opts['q']).replace('<','&lt;').replace('>','&gt;') + "</h2>")
 	document.write("<div class='container'>")
+  let tweets = []
   YTD.tweets.part0.forEach(function(t){
     let q = decodeURIComponent(opts['q'])
     if(t.tweet.full_text.indexOf(q) != -1){
-				document.write("<div class='piece'>")
-		    document.write("<div>"+ t.tweet.created_at + t.tweet.full_text + "<a href='https://twitter.com/aaa/status/" +t.tweet.id+ "'>*</a>"+ "</div>");
-				if(t.tweet.entities.media){
-						t.tweet.entities.media.forEach(function(e){
-								document.write('<img src="'+ e.media_url +':thumb">');
-							});
-					}
-				document.write("</div>")
+        tweets.push(t);
     }
+  })
+  tweets.sort(function(a, b){return (new Date(a.tweet.created_at)) - (new Date(b.tweet.created_at))});
+  let preYear = "";
+  tweets.forEach(function(t){
+      let td = new Date(t.tweet.created_at)
+      let y = td.getFullYear()
+      if(y != preYear){
+          document.write("<h3>" + y + "</h3>");
+          preYear = y
+      }
+			document.write("<div class='piece'>")
+	    document.write("<div>"+ t.tweet.created_at + t.tweet.full_text + "<a href='https://twitter.com/aaa/status/" +t.tweet.id+ "'>*</a>"+ "</div>");
+			if(t.tweet.entities.media){
+					t.tweet.entities.media.forEach(function(e){
+							document.write('<img src="'+ e.media_url +':thumb">');
+						});
+				}
+			document.write("</div>")
   });
 	document.write("</div>")
 }
