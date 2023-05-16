@@ -121,6 +121,11 @@ function dateFunc(){
 							document.write('<img src="'+ e.media_url +':thumb">');
 						});
 				}
+			if(t.tweet.entities.urls){
+					t.tweet.entities.urls.forEach(function(e){
+              document.write('<iframe src="https://hatenablog-parts.com/embed?url='+e.expanded_url+'" style="width:100%;" frameborder="0" scrolling="no"></iframe>')
+						});
+				}
 			document.write("</div>")
   });
 	document.write("</div>")
