@@ -1,0 +1,104 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<script>
+  window.YTD = {tweets: {part0:{}}};
+</script>
+<script src="tweets.js"></script>
+<style>
+body{
+  color: white;
+  background-color: black;
+}
+div {
+  font-size: xx-small;
+}
+div.piece{
+    background-color: #333;
+    margin: 1px;
+    padding: 1px;
+    /*border: solid 1px #666;*/
+    border-radius: 0px;
+}
+div.container{
+  column-count:4;
+	column-gap: 0;
+}
+a{color: #ddf;}
+h3 {
+  background-color: #33f;
+}
+</style>
+</head>
+<body>
+<h1>Tweet archive viewer2</h1>
+<a href="?mode=ranking">ranking 2022</a>
+<a href="?mode=monthly">monthly 2022</a>
+<a href="?mode=search&q=Arduboy">search</a>
+<a href="?mode=date&d=0204">date</a>
+
+<script>
+
+var search = document.location.search;
+var opts = {};
+if(search.length > 0){
+  search = search.replace("?","")
+  search.split("&").forEach((p) => {
+    let parts = p.split("=")
+    opts[parts[0]] = parts[1]
+  })
+}
+
+function dateFunc(){
+  let parts = opts['d']
+  let m = parseInt(parts.slice(0,2))
+  let d = parseInt(parts.slice(2))
+  let tweets = []
+  YTD.tweets.part0.forEach(function(t, i){
+    let td = new Date(t.tweet.created_at)
+    if(td.getMonth()+1 == m && td.getDate() == d && t.tweet.full_text.indexOf("RT ") != 0 && t.tweet.full_text.indexOf("@") != 0){
+        tweets.push(t);
+    }
+  });
+  tweets.sort(function(a, b){return (new Date(a.tweet.created_at)) - (new Date(b.tweet.created_at))});
+
+  document.write("<div class='container'>")
+  let preYear = "";
+  tweets.forEach(function(t){
+      let td = new Date(t.tweet.created_at)
+      let y = td.getFullYear()
+      if(y != preYear){
+          document.write("<h3>" + y + "</h3>");
+          preYear = y
+      }
+            if(t.tweet.entities.urls){
+                let flag = false
+                t.tweet.entities.urls.forEach(function(e){
+                        //document.write('<iframe src="https://hatenablog-parts.com/embed?url='+e.expanded_url+'" style="width:100%;" frameborder="0" scrolling="no"></iframe>')
+                        if(e.expanded_url.indexOf("https://htn.to/") == 0){
+                            flag = true
+                        }
+                });
+                if(flag){return}
+            }
+			document.write("<div class='piece'>")
+      document.write("<div>"+ /*td.getFullYear()+"/"+(td.getMonth()+1)+"/"+td.getDate() +*/"</div><div>"+ t.tweet.full_text + "<a href='https://twitter.com/aaa/status/" +t.tweet.id+ "'>*</a>"+ "</div>");
+			if(t.tweet.entities.media){
+					t.tweet.entities.media.forEach(function(e){
+							document.write('<img src="'+ e.media_url +':thumb">');
+						});
+				}
+          if(t.tweet.entities.urls){
+                  t.tweet.entities.urls.forEach(function(e){
+                          //document.write('<iframe src="https://hatenablog-parts.com/embed?url='+e.expanded_url+'" style="width:100%;" frameborder="0" scrolling="no"></iframe>')
+                  });
+                  console.log(t.tweet.entities.urls)
+          }
+			document.write("</div>")
+  });
+	document.write("</div>")
+}
+dateFunc();
+</script>
+</body>
+</html>
